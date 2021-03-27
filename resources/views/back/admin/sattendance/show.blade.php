@@ -6,9 +6,9 @@
 <div class="col-md-12 col-sm-12 ">
   <div class="x_panel">
     <div class="x_title">
-      <h2><strong class="card-title">All Students</strong>
+      <h2><strong class="card-title">View Students Attendance</strong>
         </h2>
-        <a href="{{route('teacher.students.create')}}" class="btn btn-success pull-right btn-sm">Add New Student</a>
+        
       <ul class="nav navbar-right panel_toolbox">
         
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>

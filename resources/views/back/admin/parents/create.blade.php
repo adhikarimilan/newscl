@@ -117,6 +117,52 @@
                           <input type="checkbox" name="pass" id='pass' value="1" style="transform: scale(1.2)"><label for="pass" class='ml-2 text-dark'>Set Password</label>
                       </div>
                   </div>
+
+                  {{-- student addition --}}
+                <h3 class="text-dark mt-2">Add Student</h3>
+                
+                @csrf
+                <div id="student-sel">
+                <div id="std-1" >
+                <div class="p-2" style="border:1px solid;">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <div class="input-group-addon" data-toggle="tooltip" data-placement="right"  data-original-title="Choose Class"><i class="fa fa-home"></i></div>
+                          <select name="class" id="class-1" class="form-control classes" title="Choose Class" onchange="gsecs(1)">
+                              <option value="">Choose Class</option>
+                              @foreach ($classes as $class)
+                          <option value="{{$class->id}}" >{{$class->name}}</option> 
+                              @endforeach
+                          </select>
+                          <span class="spinner-border spinner-border-sm text-primary ml-1 d-none" role="status" id="spinner-1" style="margin-top:8px;">
+                              <span class="sr-only">Loading...</span>
+                          </span>
+                      </div>
+                  </div>
+                  <div id="sections-1">
+                  <div class="form-group" id='section-choose-def-1'>
+                      <div class="input-group">
+                          <div class="input-group-addon" data-toggle="tooltip" data-placement="right"  data-original-title="Choose Section"><i class="fa fa-star"></i></div>
+                          <select name="section" id="section" class="form-control" title="Choose Section">
+                              <option value="">Choose Section</option>
+                          </select>
+                      </div>
+                      
+                  </div>
+                  
+              </div>
+              <input type="button" value="search student" id="stdsearch-1" class="btnsearch mb-1" onclick="searchstd(1)">
+              <div id="students-1">
+
+              </div>
+              <div id="relation-1"></div>
+              </div>
+              <button class="btn btn-dark my-2" type="button" id="minus-1" onclick="remsec(1)">-</button>
+            </div>
+            {{-- endstd1 --}}
+          </div>
+              <button class="btn btn-primary my-2" type="button" id="plus-sec">+</button>
+
                     <div class="form-actions form-group"><button type="submit" class="btn btn-success btn">Submit</button></div>
                 </form>
                 
@@ -200,6 +246,17 @@ function gsecs(id){
             }
 }
 
+function chrel(id){
+  let num=id;
+  let rel=$("#rel-"+num).val();
+  if(rel=='1'){
+    $('#reln-'+num).show();
+    $('#reln-'+num).focus();
+  }
+  else
+  $('#reln-'+num).hide();
+}
+
 function searchstd(id){
         let num=id;
           event.preventDefault();
@@ -208,6 +265,8 @@ function searchstd(id){
           
           if(cval){
             let updated=$('#student-updated-'+ num);
+            if(updated) updated.remove();
+            updated=$('#relation-updated-'+ num);
             if(updated) updated.remove();
           $('#spinner-'+num).removeClass('d-none');
 
@@ -235,13 +294,18 @@ function searchstd(id){
           var newstds=response.data;
           let options='';
           let students=$('#students-'+num);
+          let rels=$('#relation-'+num);
           let pre='<div class="form-group" id="student-updated-'+num+'"><div class="input-group"><div class="input-group-addon"><i class="fa fa-user"></i></div><select name="student[]"  class="form-control" title="Choose Student"><option value="">Choose Student</option>';
           newstds.forEach(newsec => {
              // options+="<option value='fgk'>dfkjgk</option>";
-             pre+='<option value="'+ newsec.id +'">'+newsec.name+'('+ newsec.roll_no +')'+'</option>';
+             pre+='<option value="'+ newsec.id +'">'+newsec.name+'('+ newsec.roll_no +')'+'</option></div></div>';
+           
           });
+          let rel='<div class="form-group" id="relation-updated-'+num+'"><div class="input-group"><div class="input-group-addon" data-toggle="tooltip" data-placement="right"  data-original-title="Choose Relation" ><i class="fa fa-star"></i></div> <select name="relation[]" id="rel-'+num+'" class="form-control" onchange="chrel('+num+')"><option value="">Choose Relation</option><option value="Father">Father</option><option value="Mother">Mother</option><option value="Uncle">Uncle</option><option value="Aunt">Aunt</option><option value="1">Other</option></select><br><input type="text" name="reln[]" id="reln-'+num+'" placeholder="please specify the relation" class="form-control" style="display:none;">';
         pre=$(pre);
+        rel=$(rel);
         students.append(pre);
+        rels.append(rel);
 	    },
 		catch :function(response){
 		  alert('an error occured');

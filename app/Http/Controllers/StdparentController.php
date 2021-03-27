@@ -64,15 +64,40 @@ class StdparentController extends Controller
         $input=$request->except('_token');
         if($request->pass && $request->password){
             $input['password']=Hash::make($request->password);
-        }
+        }else $input['password']=null;
         if($request->hasFile('pic')){ 
             $uploadedFile = $request->file('pic');
             if ($uploadedFile->isValid()) {
                 $input['avatar']=FileUpload::photo($request,'pic','','uploads/parents',500,500);
                  }
         }
-        $input=Stdparent::create($input);
-        $link=route('parents.show',['parent'=>$input->id]);
+        $parent=Stdparent::create($input);
+        $link=route('parents.show',['parent'=>$parent->id]);
+
+        $std=$request->student;
+        $relation=$request->relation;
+        $reln=$request->reln;
+
+        if($std && count($std)){
+            for($i=0;$i<count($std);$i++)
+            {
+                
+                $student=Student::find($std[$i]);
+                $stdpar=StudentParent::where(['parent_id'=>$parent->id,'student_id'=>$std[$i]])->get();
+                $input=[];
+                if($student && !count($stdpar)){
+                    $input['parent_id']=$parent->id;
+                    $input['student_id']=$std[$i];
+                    if($relation[$i]=="1"){
+                        $input['relation']=$reln[$i]; 
+                    }
+                    else
+                    $input['relation']=$relation[$i]; 
+                $input=StudentParent::create($input);
+                }
+            }
+        }
+
         return redirect()->back()->with(['success'=>'Parent added successfully','link'=>$link]);
     }
 
@@ -207,6 +232,7 @@ class StdparentController extends Controller
                 $student=Student::find($std[$i]);
                 $stdpar=StudentParent::where(['parent_id'=>$request->par,'student_id'=>$std[$i]])->get();
                 $input=[];
+                //implementing one parent account  for a student 
                 if($student && !count($stdpar)){
                     $input['parent_id']=$request->par;
                     $input['student_id']=$std[$i];

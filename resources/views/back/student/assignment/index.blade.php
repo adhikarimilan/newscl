@@ -1,4 +1,4 @@
-@extends('back.admin.layout.index')
+@extends('back.student.layout.index')
 @section('content')
 <div class="right_col" role="main">
     <div class="">
@@ -6,7 +6,7 @@
 <div class="col-md-12 col-sm-12 ">
   <div class="x_panel">
     <div class="x_title">
-      <h2><strong class="card-title">All Book Issues</strong>
+      <h2><strong class="card-title">View Your Assignments</strong>
         </h2>
       <ul class="nav navbar-right panel_toolbox">
         
@@ -32,46 +32,47 @@
               @include('msg.msg')
       <p class="text-muted font-13 m-b-30">
       </p>
-      <table id="datatable-keytable" class="table table-striped table-bordered" style="width:100%">
+      <table id="datatable-buttons" class="table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
-              <th style="display: none;">&nbsp;</th>
+            <th class="d-none">&nbsp;</th>
               <th>Name</th>
-              <th>Isstaff</th>
-              <th>Borrowed Book</th>
-              <th>Issued At</th>
-              <th>Return Till</th>
-              <th>Returned</th>
+              <th>Teacher name</th>
+              <th>Class</th>
+              <th>Section</th>
+              <th>Created at</th>
+              <th>Submission date</th>
+              <th>File</th>
               <th>Action</th>
           </tr>
       </thead>
       <tbody>
-      @foreach ($bookissues as $bookissue)
+      @foreach ($assignments as $assignment)
           <tr>
-            <td style="display: none;">&nbsp;</td>
-              <td>@if ($bookissue->isteacher)
-                <a href="{{route('teachers.show',['teacher'=>$bookissue->teacher->id])}}">{{$bookissue->teacher->name}}</a>
+            <th class="d-none">&nbsp;</th>
+              <td>{{$assignment->name }}</td>
+              <td>{{$assignment->teacher?$assignment->teacher->name:'N/A'}}
+              </td>
+              <td>{{$assignment->class?$assignment->class->name:'N/A'}}</td>
+               <td>{{$assignment->section?$assignment->section->name:'N/A'}}</td>
+               <td>@php
+                $cdate=date_create($assignment->created_at);
+                echo date_format($cdate,"Y-m-d H:i");
+            @endphp</td>
+              <td @if (date('Y-m-d') > $assignment->submitted_till) class='text-danger'
+              @endif>{{$assignment->submitted_till}}</td>
+              <td>@if ($assignment->file)
+                <a href="{{asset($assignment->file)}}">view file</a> 
               @else
-              <a href="{{route('students.show',['student'=>$bookissue->student->id])}}">{{$bookissue->student->name}}</a>   
-              @endif</td>
-              <td>{{$bookissue->isteacher? 'yes' : 'no'}}</td>
-              <td><a href="{{route('books.show',['book'=>$bookissue->book->id])}}">{{$bookissue->book ? $bookissue->book->title .'('. $bookissue->book->author .')' : 'no'}}</a></td>
-              <td>{{$bookissue->issued_at}}</td>
-              <td @if (date('Y-m-d') > $bookissue->return_bef) class='text-danger'
-                @endif>{{$bookissue->return_bef}}</td>
-              <td>{{$bookissue->returned ? 'yes' : 'no'}}</td>
-              <td><a class="btn btn-info" href="{{route('bookissues.show',['bookissue'=>$bookissue->id])}}"><i class="fa fa-eye"></i></a>
-              
-                <a class="btn btn-success"  onclick="document.getElementById('{{'delete-form-'.$bookissue->id}}').submit();" data-toggle="tooltip" data-placement="right"  data-original-title="Mark as Returned"><i class="fa fa-check-square"></i></a>
-                <form action="{{route('bookissues.destroy',['bookissue'=>$bookissue->id])}}" id="{{'delete-form-'.$bookissue->id}}" method="post">
-                @csrf {{method_field('delete')}}
-                </form>
+                 N/A 
+              @endif
+              </td>
+              <td><a class="btn btn-info" href="{{route('student.assignment.view',['id'=>$assignment->id])}}"><i class="fa fa-eye"></i></a>
               </td>
           </tr>
       @endforeach
          
       </tbody>
-      
       </table>
     </div>
   </div>
@@ -83,7 +84,6 @@
 </div>
 
 @endsection
-
 @section('extra-css')
 <style>
 
@@ -121,3 +121,28 @@
  <script src="{{asset('back/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
 
 @endsection
+
+@section('contents')
+
+<div class="animated fadeIn">
+  <div class="row">
+
+      <div class="col-md-12">
+        @include('msg.msg')
+      <div class="card">
+    <div class="card-header">
+      <strong class="card-title">All Assignments</strong>
+  </div>
+  <div class="card-body">
+            
+            <div class="table-responsive ">
+              <table id="bootstrap-data-table-export" class="table  table-bordered table-hover"   cellspacing="0" >
+                
+            </table>
+            </div>
+        </div>
+    </div></div>
+</div>
+</div>
+@endsection
+

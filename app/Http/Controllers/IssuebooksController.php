@@ -48,9 +48,9 @@ class IssuebooksController extends Controller
             'return_bef'=>'required|date',
         ]);
         $input=$request->except('_token');
-        $bookissue=Issuebook::where(['student_id'=>$input['student'],'book_id'=>$input['book'],'returned'=>0]);
-        if($bookissue)
-        return redirect()->back()->with(['error'=>'Book Issued already to the same student ']);
+        $bookissue=Issuebook::where(['student_id'=>$input['student'],'book_id'=>$input['book'],'returned'=>0])->get();
+        if(count($bookissue))
+        return redirect()->back()->with(['error'=>'Book Issued already to the same student and has not been returned ']);
         $input['student_id']=$input['student'];
         $input['book_id']=$input['book'];
         $input['issued_at'] = Carbon::now()->toDateTimeString(); 

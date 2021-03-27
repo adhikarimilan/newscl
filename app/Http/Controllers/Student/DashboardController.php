@@ -11,36 +11,56 @@ use App\Teacher;
 use App\Book;
 use App\Issuebook;
 use App\BookCategories;
+use App\Assignment;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
     public function index(){
-        $students=Student::where('active','1')->count();
+        $student=Auth::guard('student')->user();
+        //dd($student->class->id);
         $teachers=Teacher::where('active','1')->count();
         $parents=Stdparent::where('active','1')->count();
-        $classes=Stdclass::where('active','1')->get();
+        $issuedbooks=Issuebook::where('returned','0')->where('student_id',$student->id)->count();
+        $assignments=Assignment::where('submitted_till','>=',date('Y-m-d'))->where('class_id',$student->class->id ?? '0' )->count();
+        //dd($classes);
         $classe=[];
-        foreach($classes as $cls){
-            $classe[]=['class'=> $cls->name,'total'=> $cls->students->count()];
-        }
         $classe=json_encode($classe);
-        $stdclasses=count($classes);
-    	return view('back.student.dashboard',compact('students','teachers','parents','stdclasses','classe'));
+    	return view('back.student.dashboard',compact('student','teachers','parents','classe','assignments','issuedbooks'));
     }
 
-    public function libindex(){
-        $books=Book::count();
-        $issuedbooks=Issuebook::where('returned','0')->count();
-        $categories=BookCategories::get();
-        $classe=[];
-        foreach($categories as $cate){
-            $classe[]=['cat'=> $cate->name,'total'=> $cate->books->count()];
-        }
-        $classe=json_encode($classe);
-        $categories=count($categories);
-    	return view('back.teacher.libdashboard',compact('issuedbooks','books','categories','classe'));
+    public function bookissues(){
+        $student=Auth::guard('student')->user();
+        $bookissues=$student->issuedbooks ? $student->issuedbooks : 0;
+        // if($class) $assignment=$class->assignments->where('id',$id)->first();
+        // if(!$assignment) abort('404');
+        // //dd($assignment);
+        return view('back.student.bookissues.index',compact('bookissues'));
+    }
+
+    public function assignment($id){
+        $student=Auth::guard('student')->user();
+        $class=$student->class ? $student->class : 0;
+        if($class) $assignment=$class->assignments->where('id',$id)->first();
+        if(!$assignment) abort('404');
+        //dd($assignment);
+        return view('back.student.assignment.view',compact('assignment'));
+    }
+    public function studentassignments(){
+        $student=Auth::guard('student')->user();
+        $class=$student->class ? $student->class : 0;
+        if($class) $assignments=$class->assignments;
+        else $assignments=[];
+        //$found=false;
+        // foreach($parent->student_parent as $std){
+        //     if($std->student->id == $id){
+        //         $found=true;
+        //     break;
+        //     }
+        // }
+        // if(!$found) abort('403');
+        return view('back.student.assignment.index',compact('assignments'));
     }
 
     public function profile(){

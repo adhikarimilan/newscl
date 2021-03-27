@@ -28,5 +28,10 @@ class Stdclass extends Model
     {
         return $this->hasMany('\App\Assignment', 'class_id')->where('submitted_till','>=',date('Y-m-d'));
     }
+    public function assignment($id)
+    {
+        //dd($id);
+        return $this->hasMany('\App\Assignment', 'class_id');//->where('id',$id);
+    }
 }
 

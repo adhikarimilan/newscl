@@ -20,7 +20,8 @@ Route::group(['prefix'=>'student'],function(){
         });
         Route::get('student/{id}','Student\DashboardController@student')->name('student.student.view');
         Route::get('assignment/{id}','Student\DashboardController@assignment')->name('student.assignment.view');
-        Route::get('studentassignment/{id}','Student\DashboardController@studentassignments')->name('student.stdassignments.view');
+        Route::get('assignments','Student\DashboardController@studentassignments')->name('student.assignments');
+        Route::get('bookissues','Student\DashboardController@bookissues')->name('student.bookissues');
         Route::get('studentattendance','Student\DashboardController@stdattendance')->name('student.stdattendance.view');
     });
 
