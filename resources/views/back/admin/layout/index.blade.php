@@ -110,6 +110,12 @@
                       <li><a href="{{route('bookissues.index')}}">Issued Book List</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-book"></i>School Events <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('events.index')}}">All Events</a></li>
+                      <li><a href="{{route('events.create')}}">Add Event</a></li>
+                    </ul>
+                  </li>
                   <li>&nbsp;</li>
                 </ul>
               </div>

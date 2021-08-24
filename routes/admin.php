@@ -43,6 +43,7 @@ Route::group(['prefix'=>'admin'],function(){
         Route::resource('books', 'BookController');
         Route::resource('bookcategories', 'BookcategoriesController');
         Route::resource('bookissues', 'IssueBooksController');
+        Route::resource('events', 'SchooleventController');
          Route::group(['prefix'=>'teacherattendances'],function(){
             //Route::get('/', 'TeacherController@takeattendance')->name('teacherattendances.index');
             Route::get('/{$date}/edit', 'TeacherattendanceController@edit')->name('teacherattendances.edit');
