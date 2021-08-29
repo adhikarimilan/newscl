@@ -7,18 +7,26 @@ use Illuminate\Http\Request;
 use App\Bookcategories;
 use App\FileUpload;
 use Illuminate\Support\Facades\File;
+use App\Message;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $books=Book::get();
-        return view('back.admin.books.index',compact('books'));
+        return view('back.admin.books.index',compact('books','msgs','unseen'));
     }
 
     /**
@@ -28,8 +36,11 @@ class BookController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $categories=Bookcategories::get();
-        return view('back.admin.books.create',compact('categories'));
+        return view('back.admin.books.create',compact('categories','msgs','unseen'));
     }
 
     /**
@@ -66,8 +77,11 @@ class BookController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $book=Book::findOrFail($id);
-        return view('back.admin.books.view',compact('book'));
+        return view('back.admin.books.view',compact('book','msgs','unseen'));
     }
 
     /**
@@ -78,9 +92,12 @@ class BookController extends Controller
      */
     public function edit($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $book=Book::findOrFail($id);
         $categories=Bookcategories::get();
-        return view('back.admin.books.edit',compact('categories','book'));
+        return view('back.admin.books.edit',compact('categories','book','msgs','unseen'));
     }
 
     /**
@@ -129,8 +146,14 @@ class BookController extends Controller
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
-        //
+        $book=Book::findOrFail($id);
+        if($book->pic && File::exists($book->pic)){
+            unlink($book->pic);
+            $book->pic=null;
+        }
+        $book->delete();
+        return redirect()->back()->with(['success'=>'Book deleted successfully']);
     }
 }

@@ -32,38 +32,23 @@
                 @include('msg.msg')
                 <div class="std-card" >
                   <div class="pt-2">
-                @if($event->avatar)
-                <img src="{{asset($event->avatar)}}" alt="" style="width:200px;border: 5px solid darkgray;" >
+                @if($event->pic)
+                <img src="{{asset($event->pic)}}" alt="" style="width:200px;border: 5px solid darkgray;" >
               @else 
               <img src="{{asset('img/default.jpeg')}}" alt="" style="width:200px;border: 5px solid darkgray;" >
               @endif
             
             
                 <h3 class="text-success">{{$event->name}}</h3>
-                <small>{{$event->bio}}</small>
               </div>
             
                 <div class="text-dark">
                    
-               <h6>Gender: @if($event->gender=='0')
-                  Male
-              @elseif($event->gender=='1')
-                  Female
-              @else 
-                  Other
-              @endif</h6>
-              <h6>Address: {{$event->address}}</h6>
-              <h6>Contact: {{$event->contact}}</h6>
-              <h6>Email: {{$event->email}}</h6>
-              <h6>Children : @foreach ($event->student_event as $key=>$stdpar)
-                @if($key )
-                      ,
-                    
-                @endif
-                <a href="{{route('students.show',['student'=>$stdpar->student->id])}}">{{$stdpar->student->name}}</a>
-                
-              @endforeach
-              </h6>
+              @if($event->file)
+              <h6>File: <a href="{{asset($event->file)}}">View</a></h6>
+              @endif
+              <h6>Description: </h6>
+              <p style="border: 1px solid darkgray;padding:3px;">{{$event->description}}</p>
               </div>
                 
             </div>

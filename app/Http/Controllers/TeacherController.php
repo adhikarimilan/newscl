@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\FileUpload;
 use File;
+use App\Message;
 
 class TeacherController extends Controller
 {
@@ -15,11 +16,24 @@ class TeacherController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $teachers=Teacher::orderBy('order')->get();
        // $teachers=[];
-        return view('back.admin.teacher.index', compact('teachers'));
+        return view('back.admin.teacher.index', compact('teachers','msgs','unseen'));
     }
 
     /**
@@ -29,7 +43,11 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('back.admin.teacher.create');
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
+        return view('back.admin.teacher.create',compact('msgs','unseen'));
     }
 
     /**
@@ -76,8 +94,12 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $teacher=Teacher::findOrFail($id);
-        return view('back.admin.teacher.view', compact('teacher'));
+        return view('back.admin.teacher.view', compact('teacher','msgs','unseen'));
     }
 
     /**
@@ -88,8 +110,12 @@ class TeacherController extends Controller
      */
     public function edit( $id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $teacher=Teacher::findOrFail($id);
-        return view('back.admin.teacher.edit', compact('teacher'));
+        return view('back.admin.teacher.edit', compact('teacher','msgs','unseen'));
     }
 
     /**
@@ -161,6 +187,10 @@ class TeacherController extends Controller
 
     public function takeattendance()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $date=date("Y-m-d");
         $attendances=Teacherattendance::where('created_at','like',$date.'%')->get();
         $teachers = Teacher::with('tattendance')->whereHas('tattendance', function ($query) {
@@ -169,8 +199,8 @@ class TeacherController extends Controller
         });
         $teachers=$teachers->get();
         if(count($attendances))
-        return view('back.admin.tattendance.view',compact('teachers'));
+        return view('back.admin.tattendance.view',compact('teachers','msgs','unseen'));
         
-        return view('back.admin.tattendance.create',compact('teachers'));
+        return view('back.admin.tattendance.create',compact('teachers','msgs','unseen'));
     }
 }

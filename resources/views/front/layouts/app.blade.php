@@ -9,6 +9,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+	<link rel="icon" href="{{asset('img/logo1.png')}}" type="image/x-icon">
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
 			<!--
 			CSS
@@ -22,6 +24,7 @@
 			<link rel="stylesheet" href="{{ asset('front/css/owl.carousel.css') }}">			
 			<link rel="stylesheet" href="{{ asset('front/css/jquery-ui.css') }}">			
 			<link rel="stylesheet" href="{{ asset('front/css/main.css') }}">
+			@yield('extra-css')
 </head>
 <body>
 <header id="header" id="home">
@@ -38,7 +41,7 @@
 			  			</div>
 			  			<div class="col-lg-6 col-sm-6 col-4 header-top-right no-padding">
 			  				<a href="tel:+953 012 3654 896"><span class="lnr lnr-phone-handset"></span> <span class="text">+953 012 3654 896</span></a>
-			  				<a href="mailto:support@colorlib.com"><span class="lnr lnr-envelope"></span> <span class="text">support@colorlib.com</span></a>			
+			  				<a href="mailto:support@myschool.com"><span class="lnr lnr-envelope"></span> <span class="text">support@myschool.com</span></a>			
 			  			</div>
 			  		</div>			  					
 	  			</div>
@@ -46,11 +49,11 @@
 		    <div class="container main-menu">
 		    	<div class="row align-items-center justify-content-between d-flex">
 			      <div id="logo">
-			        <a href="index.html"><img src="img/logo.png" alt="" title="" /></a>
+			        <a href="{{url('/')}}"><img src="{{asset('img/logo.png')}}" alt="" title="" /></a>
 			      </div>
 			      <nav id="nav-menu-container">
 			        <ul class="nav-menu">
-			          <li><a href="index.html">Home</a></li>
+			          <li><a href="{{url('/')}}">Home</a></li>
 			          <li><a href="about.html">About</a></li>
 			          <li><a href="courses.html">Courses</a></li>
 			          <li><a href="events.html">Events</a></li>
@@ -74,7 +77,7 @@
 					          </li>					                		
 			            </ul>
 			          </li>					          					          		          
-			          <li><a href="contact.html">Contact</a></li>
+			          <li><a href="{{url('/contact')}}">Contact</a></li>
 			        </ul>
 			      </nav><!-- #nav-menu-container -->		    		
 		    	</div>
@@ -166,8 +169,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</footer>	
 			<!-- End footer Area -->	
 
-            <script src="{{ asset('front/js/vendor/jquery-2.2.4.min.js') }}"></script>
-			<script src="{{ asset('front/https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js') }}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
+			<script src="{{asset('front/js/vendor/jquery-2.2.4.min.js')}}"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 			<script src="{{ asset('front/js/vendor/bootstrap.min.js') }}"></script>			
 			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
   			<script src="{{ asset('front/js/easing.min.js') }}"></script>			
@@ -180,5 +184,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<script src="{{ asset('front/js/owl.carousel.min.js') }}"></script>									
 			<script src="{{ asset('front/js/mail-script.js') }}"></script>	
 			<script src="{{ asset('front/js/main.js') }}"></script>
+
+			@yield('extra-js')
 </body>
 </html>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Teacher;
 use App\Teacherattendance;
 use Session;
+use App\Message;
 
 class TeacherattendanceController extends Controller
 {
@@ -15,8 +16,21 @@ class TeacherattendanceController extends Controller
      * @param  
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $reqdate=false;
         if(request()->y && request()->m){
             $reqdate=date_create(request()->y.'-'.request()->m);
@@ -35,7 +49,7 @@ class TeacherattendanceController extends Controller
         if($reqdate){
             $d=cal_days_in_month(CAL_GREGORIAN,request()->m,request()->y);
         }
-        return view('back.admin.tattendance.show')->with(['teachers'=>$teachers,'d'=>$d,'reqdate'=>$reqdate]);
+        return view('back.admin.tattendance.show')->with(['teachers'=>$teachers,'d'=>$d,'reqdate'=>$reqdate,'msgs'=>$msgs,'unseen'=>$unseen]);
     }
 
    /**
@@ -46,6 +60,10 @@ class TeacherattendanceController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+        
         $date=date("Y-m-d");
         $attendances=Teacherattendance::where('created_at','like',$date.'%')->get();
         $teachers = Teacher::with('tattendance')->whereHas('tattendance', function ($query) {
@@ -57,7 +75,7 @@ class TeacherattendanceController extends Controller
         $teachers=$teachers->get();
         if(count($attendances)){
             $success="Teachers attendance for today has been registered already click enable edit to edit this attendance";
-        return view('back.admin.tattendance.view')->with(['success'=>$success,'teachers'=>$teachers]);
+        return view('back.admin.tattendance.view')->with(['success'=>$success,'teachers'=>$teachers,'msgs'=>$msgs,'unseen'=>$unseen]);
         }
 //         $from = date('2020-07-21');
 // $to = date("Y-m-d H:i:s");
@@ -66,7 +84,7 @@ class TeacherattendanceController extends Controller
         
         //dd($teachers->tattendance);
         $teachers=Teacher::where('active','1')->orderBy('order')->get();
-        return view('back.admin.tattendance.create',compact('teachers'));
+        return view('back.admin.tattendance.create',compact('teachers','msgs','unseen'));
     }
 
     
@@ -98,6 +116,10 @@ class TeacherattendanceController extends Controller
    
     public function edit($teacherattendance)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+        
         //Session::forget('success');
         $teachers = Teacher::with('tattendance')->whereHas('tattendance', function ($query) {
             $date=date("Y-m-d");
@@ -106,7 +128,7 @@ class TeacherattendanceController extends Controller
         //dd($products->get());
         //$teachers=Teacher::where('active','1')->orderBy('order')->get();
         $teachers=$teachers->where('active','1')->orderBy('order')->get();
-        return view('back.admin.tattendance.edit',compact('teachers'));
+        return view('back.admin.tattendance.edit',compact('teachers','msgs','unseen'));
     }
 
     /**

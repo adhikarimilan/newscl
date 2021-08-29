@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use Illuminate\Http\Request;
+use App\Message;
 
 class AssignmentController extends Controller
 {
@@ -12,10 +13,21 @@ class AssignmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $assignments=Assignment::orderBy('created_at')->get();
-        return view('back.admin.assignment.index', compact('assignments'));
+        return view('back.admin.assignment.index', compact('assignments','msgs','unseen'));
     }
 
     /**
@@ -47,8 +59,11 @@ class AssignmentController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $assignment=Assignment::findOrFail($id);
-        return view('back.admin.assignment.view', compact('assignment'));
+        return view('back.admin.assignment.view', compact('assignment','msgs','unseen'));
     }
 
     /**

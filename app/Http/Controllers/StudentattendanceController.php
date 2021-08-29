@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Stdclass;
 use App\Student;
 use Session;
+use App\Message;
 
 class StudentattendanceController extends Controller
 {
@@ -15,8 +16,20 @@ class StudentattendanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         
         $classes=Stdclass::where('active','1')->orderBy('order')->get();
         $reqdate=false;
@@ -41,7 +54,7 @@ class StudentattendanceController extends Controller
                 ->where('class_id', request()->class);
         });
         else
-        return view('back.admin.sattendance.show')->with(['statuserr'=>'please select class','classes'=>$classes]);
+        return view('back.admin.sattendance.show')->with(['statuserr'=>'please select class','classes'=>$classes,'msgs'=>$msgs,'unseen'=>$unseen]);
 
        
         //dd($products->get());
@@ -52,7 +65,7 @@ class StudentattendanceController extends Controller
         if($reqdate){
             $d=cal_days_in_month(CAL_GREGORIAN,request()->m,request()->y);
         }
-        return view('back.admin.sattendance.show')->with(['students'=>$students,'classes'=>$classes,'reqdate'=>$reqdate,'d'=>$d]);
+        return view('back.admin.sattendance.show')->with(['students'=>$students,'classes'=>$classes,'reqdate'=>$reqdate,'d'=>$d,'msgs'=>$msgs,'unseen'=>$unseen]);
     }
 
     /**
@@ -62,6 +75,10 @@ class StudentattendanceController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $date=date("Y-m-d");
         $classes=Stdclass::where('active','1')->orderBy('order')->get();
         $students = [];
@@ -76,7 +93,7 @@ class StudentattendanceController extends Controller
         $students = Student::where('active','1')->where('class_id', request()->class)->orderBy('roll_no');
     }
         else
-        return view('back.admin.sattendance.create')->with(['error'=>'please select class','classes'=>$classes]);
+        return view('back.admin.sattendance.create')->with(['error'=>'please select class','classes'=>$classes,'msgs'=>$msgs,'unseen'=>$unseen]);
         
         
         //dd($products->get());
@@ -86,7 +103,7 @@ class StudentattendanceController extends Controller
         //dd($students);
         if(count($attendances)){
             $success="Students attendance for today has been registered already click enable edit to edit this attendance";
-        return view('back.admin.sattendance.view')->with(['success'=>$success,'students'=>$students,'classes'=>$classes]);
+        return view('back.admin.sattendance.view')->with(['success'=>$success,'students'=>$students,'classes'=>$classes,'msgs'=>$msgs,'unseen'=>$unseen]);
         }
 //         $from = date('2020-07-21');
 // $to = date("Y-m-d H:i:s");
@@ -95,7 +112,7 @@ class StudentattendanceController extends Controller
         
         //dd($teachers->tattendance);
        // $students = Student::where('active','1')->orderBy('roll_no')->get();
-        return view('back.admin.sattendance.create',compact('students','classes'));
+        return view('back.admin.sattendance.create',compact('students','classes','msgs','unseen'));
     }
 
     /**
@@ -156,6 +173,10 @@ class StudentattendanceController extends Controller
      */
     public function edit($studentattendance)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+        
         $students = Student::with('stdattendance')->whereHas('stdattendance', function ($query) {
             $date=date("Y-m-d");
             $query->where('created_at','like', $date.'%');
@@ -163,7 +184,7 @@ class StudentattendanceController extends Controller
         //dd($products->get());
         //$teachers=Teacher::where('active','1')->orderBy('order')->get();
         $students=$students->where('active','1')->orderBy('roll_no')->get();
-        return view('back.admin.sattendance.edit',compact('students'));
+        return view('back.admin.sattendance.edit',compact('students','msgs','unseen'));
     }
 
     /**

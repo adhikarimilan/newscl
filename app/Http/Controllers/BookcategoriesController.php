@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bookcategories;
 use Illuminate\Http\Request;
+use App\Message;
 
 class BookcategoriesController extends Controller
 {
@@ -12,10 +13,23 @@ class BookcategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $categories=Bookcategories::get();
-        return view('back.admin.bookcategories.index',compact('categories'));
+        return view('back.admin.bookcategories.index',compact('categories','msgs','unseen'));
     }
 
     /**
@@ -56,6 +70,9 @@ class BookcategoriesController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $category=Bookcategories::findOrFail($id);
         dd(json_encode($category));
     }
@@ -68,8 +85,11 @@ class BookcategoriesController extends Controller
      */
     public function edit($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $category=Bookcategories::findOrFail($id);
-        return view('back.admin.bookcategories.edit',compact('category'));
+        return view('back.admin.bookcategories.edit',compact('category','msgs','unseen'));
     }
 
     /**

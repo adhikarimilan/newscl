@@ -9,6 +9,7 @@ use App\Section;
 use App\Student;
 use App\FileUpload;
 use File;
+use App\Message;
 
 class StdclassController extends Controller
 {
@@ -17,10 +18,22 @@ class StdclassController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $classes=Stdclass::orderBy('order')->get();
-        return view('back.admin.classes.index',compact('classes'));
+        return view('back.admin.classes.index',compact('classes','msgs','unseen'));
     }
 
     /**
@@ -30,9 +43,12 @@ class StdclassController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $teachers=Teacher::orderBy('order')->get();//->only('name','id','education')
         //dd($teachers);
-        return view('back.admin.classes.create',compact('teachers'));
+        return view('back.admin.classes.create',compact('teachers','msgs','unseen'));
     }
 
     /**
@@ -70,8 +86,11 @@ class StdclassController extends Controller
      */
     public function show($class)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $class=Stdclass::findOrFail($class);
-        return view('back.admin.classes.view',compact('class'));
+        return view('back.admin.classes.view',compact('class','msgs','unseen'));
     }
 
     /**
@@ -82,10 +101,13 @@ class StdclassController extends Controller
      */
     public function edit( $class)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $class=Stdclass::findOrFail($class);
         $teachers=Teacher::orderBy('order')->get();
         //dd($class);
-        return view('back.admin.classes.edit',compact('class','teachers'));
+        return view('back.admin.classes.edit',compact('class','teachers','msgs','unseen'));
     }
 
     /**

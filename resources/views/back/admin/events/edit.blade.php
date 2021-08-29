@@ -11,7 +11,7 @@
         <div class="col-md-12 col-sm-12">
           <div class="x_panel">
             <div class="x_title">
-              <h2>Edit Parent::{{$event->name}}</h2>
+              <h2>Edit Event::{{$event->name}}</h2>
               <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
@@ -30,13 +30,13 @@
             </div>
             <div class="x_content">
                 @include('msg.msg')
-                <form action="{{route('parents.update',['parent'=>$event->id])}}" method="post" class="" id='std-form' enctype="multipart/form-data">
+                <form action="{{route('events.update',['event'=>$event->id])}}" method="post" class="" id='std-form' enctype="multipart/form-data">
                     @csrf
                     {{method_field('put')}}
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon" data-toggle="tooltip" data-placement="right"  data-original-title="Parent name"><i class="fa fa-user"></i></div>
-                            <input type="text" id="name" name="name" placeholder="Parentname" class="form-control" value="{{$event->name}}" required title="Parent Name">
+                            <div class="input-group-addon" data-toggle="tooltip" data-placement="right"  data-original-title="Event name"><i class="fa fa-user"></i></div>
+                            <input type="text" id="name" name="name" placeholder="Eventname" class="form-control" value="{{$event->name}}" required title="Event Name">
                             
                         </div>
                     </div>
@@ -109,8 +109,5 @@ function remprevfile(){
   $('#remfile').prop('checked','true');
 }
 
-
-
-})()
     </script>
 @endsection

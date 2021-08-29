@@ -17,14 +17,20 @@ Route::get('/', function () {
     return view('front.welcome');
 })->name('welcome');
 
+Route::get('/contact', function () {
+    return view('front.contact');
+})->name('contact');
+
+Route::post('/savemsg','Front\FrontendController@savemessage')->name('savemsg');
+
 Route::get('/help/{id?}', function ($id='') {
     return "<h2 style=\"text-align:center;\">help".$id."</h2>";
 });
 
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/class', function () {
 //     $class= new Stdclass;
 //     $class->name="test class";
@@ -33,9 +39,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 //     $class->save();
 // });
 
-Route::get('test', function () {
-    return view('back.admin.dashboard');
-});
+// Route::get('test', function () {
+//     return view('back.admin.dashboard');
+// });
 
 require('admin.php');
 require('teacher.php');

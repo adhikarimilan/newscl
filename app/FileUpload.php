@@ -34,10 +34,11 @@ class FileUpload extends Model
 
     }
 
-    public static function file($request,$filename,$path){
-    	
+    public static function file($request,$filename,$path,$prefix=null){
+    	if(!$prefix)
+        $prefix="assignment";
     	$file=$request->$filename;
-    	$name="assignment".rand(1111,9999)."-".date('Ymd_his').".".$file->getClientOriginalExtension();
+    	$name=$prefix.rand(1111,9999)."-".date('Ymd_his').".".$file->getClientOriginalExtension();
         $pathy = $request->file($filename)->move($path, $name);
     	return $path.'/'.$name;
 

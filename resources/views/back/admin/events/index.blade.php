@@ -56,7 +56,6 @@
                 </td>
               <td>{{$event->name }}</td>
               <td>{{$event->description }}</td>
-              <td>{{$event->active?'Active':'Inactive'}}</td>
               <td>
                 @if($event->file)
                 <a href="{{asset($event->file)}}" alt="" style="width:90px;">View</a>
@@ -64,6 +63,8 @@
               <b>No file</b>
               @endif
                 </td>
+                
+              <td>{{$event->active?'Active':'Inactive'}}</td>
               <td><a class="btn btn-info"  href="{{route('events.show',['event'=>$event->id])}}"><i class="fa fa-eye"></i></a>
               <a class="btn btn-primary" href="{{route('events.edit',['event'=>$event->id])}}"><i class="fa fa-edit"></i></a>
                 <a class="btn btn-danger" onclick="document.getElementById('{{'delete-form-'.$event->id}}').submit();"><i class="fa fa-trash"></i></a>

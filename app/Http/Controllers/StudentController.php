@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\FileUpload;
 use File;
+use App\Message;
 
 class StudentController extends Controller
 {
@@ -16,10 +17,22 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $students=Student::get();
-        return view('back.admin.students.index', compact('students'));
+        return view('back.admin.students.index', compact('students','msgs','unseen'));
     }
 
     /**
@@ -29,8 +42,12 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $classes=Stdclass::orderBy('order')->get();
-        return view('back.admin.students.create', compact('classes'));
+        return view('back.admin.students.create', compact('classes','msgs','unseen'));
     }
 
     /**
@@ -77,8 +94,12 @@ class StudentController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $student=Student::findOrFail($id);
-        return view('back.admin.students.view', compact('student'));
+        return view('back.admin.students.view', compact('student','msgs','unseen'));
     }
 
     /**
@@ -89,9 +110,13 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
+
         $classes=Stdclass::orderBy('order')->get();
         $student=Student::findOrFail($id);
-        return view('back.admin.students.edit', compact('classes','student'));
+        return view('back.admin.students.edit', compact('classes','student','msgs','unseen'));
     }
 
     /**

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\FileUpload;
 use File;
+use App\Message;
 
 
 class StdparentController extends Controller
@@ -20,10 +21,22 @@ class StdparentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $parents=Stdparent::get();
-        return view('back.admin.parents.index')->with('parents',$parents);
+        return view('back.admin.parents.index',compact('parents','msgs','unseen'));
 
 
         $par=Stdparent::findOrFail('1');
@@ -38,8 +51,11 @@ class StdparentController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $classes=Stdclass::orderBy('order')->get();
-        return view('back.admin.parents.create', compact('classes'));
+        return view('back.admin.parents.create', compact('classes','msgs','unseen'));
     }
 
     /**
@@ -109,8 +125,11 @@ class StdparentController extends Controller
      */
     public function show($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $parent=Stdparent::findOrFail($id);
-        return view('back.admin.parents.view', compact('parent'));
+        return view('back.admin.parents.view', compact('parent','msgs','unseen'));
     }
 
     /**
@@ -121,9 +140,12 @@ class StdparentController extends Controller
      */
     public function edit($id)
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $parent=Stdparent::findOrFail($id);
         $classes=Stdclass::orderBy('order')->get();
-        return view('back.admin.parents.edit', compact('parent','classes'));
+        return view('back.admin.parents.edit', compact('parent','classes','msgs','unseen'));
     }
 
     /**

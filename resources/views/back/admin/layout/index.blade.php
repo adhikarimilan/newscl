@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | </title>
+    <title>{{env('app.name','My school')}}</title>
 
     <!-- Bootstrap -->
     <link href="{{ asset('back/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -106,7 +106,7 @@
                       <li><a href="{{route('books.index')}}">All Books</a></li>
                       <li><a href="{{route('books.create')}}">Add Book</a></li>
                       <li><a href="{{route('bookcategories.index')}}">Book Categories</a></li>
-                      <li><a href="{{route('bookissues.create')}}">Issue/Return Book</a></li>
+                      <li><a href="{{route('bookissues.create')}}">Issue Book</a></li>
                       <li><a href="{{route('bookissues.index')}}">Issued Book List</a></li>
                     </ul>
                   </li>
@@ -154,80 +154,60 @@
                               <img src="{{ asset('back/prd/images/img.jpg') }}" alt="">{{Auth::guard('admin')->user()->name}}
                             </a>
                             <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item"  href="{{url('/')}}"> Visit site</a>
                               <a class="dropdown-item"  href="{{route('admin.profile')}}"> Profile</a>
-                                <a class="dropdown-item"  href="javascript:;">
+                                {{-- <a class="dropdown-item"  href="javascript:;">
                                   <span class="badge bg-red pull-right">50%</span>
                                   <span>Settings</span>
-                                </a>
-                            <a class="dropdown-item"  href="javascript:;">Help</a>
+                                </a> --}}
                               <a class="dropdown-item"  href="{{route('admin.logout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                             </div>
                           </li>
-          
+                          @if(isset($msgs) && isset($unseen))
                           <li role="presentation" class="nav-item dropdown open">
                             <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
                               <i class="fa fa-envelope-o"></i>
-                              <span class="badge bg-green">6</span>
+                              @if($unseen)
+                              <span class="badge bg-green">{{$unseen}}</span>
+                              @endif
                             </a>
                             <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                              <li class="nav-item">
+                              @if (count($msgs))
+                              @foreach ($msgs as $msg)
+                                 <li class="nav-item">
                                 <a class="dropdown-item">
                                   <span class="image"><img src="{{ asset('back/prd/images/img.jpg') }}" alt="Profile Image" /></span>
                                   <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
+                                    <span>{{$msg->name}}</span>
+                                    <span class="time">{{time_date_diff($msg->created_at)}}</span>
                                   </span>
                                   <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were where...
+                                    {{$msg->subject}}
                                   </span>
                                 </a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="dropdown-item">
-                                  <span class="image"><img src="{{ asset('back/prd/images/img.jpg') }}" alt="Profile Image" /></span>
-                                  <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
-                                  </span>
-                                  <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were where...
-                                  </span>
-                                </a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="dropdown-item">
-                                  <span class="image"><img src="{{ asset('back/prd/images/img.jpg') }}" alt="Profile Image" /></span>
-                                  <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
-                                  </span>
-                                  <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were where...
-                                  </span>
-                                </a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="dropdown-item">
-                                  <span class="image"><img src="{{ asset('back/prd/images/img.jpg') }}" alt="Profile Image" /></span>
-                                  <span>
-                                    <span>John Smith</span>
-                                    <span class="time">3 mins ago</span>
-                                  </span>
-                                  <span class="message">
-                                    Film festivals used to be do-or-die moments for movie makers. They were where...
-                                  </span>
-                                </a>
-                              </li>
+                              </li> 
+                              @endforeach
+                                
                               <li class="nav-item">
                                 <div class="text-center">
                                   <a class="dropdown-item">
-                                    <strong>See All Alerts</strong>
+                                    <strong>See All Messages</strong>
                                     <i class="fa fa-angle-right"></i>
                                   </a>
                                 </div>
+                              </li>  
+                              @else
+                              <li class="nav-item">
+                                <div class="text-center">
+                                  <a class="dropdown-item">
+                                    <strong>Nothing to show</strong>
+                                  </a>
+                                </div>
                               </li>
+                              @endif
                             </ul>
                           </li>
+                          @endif
                         </ul>
                       </nav>
                     </div>

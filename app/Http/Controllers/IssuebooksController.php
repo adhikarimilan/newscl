@@ -7,19 +7,29 @@ use Illuminate\Http\Request;
 use App\Book;
 use App\Stdclass;
 use Carbon\Carbon;
+use App\Message;
 
 
 class IssuebooksController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    private $msgs;
+    private $unseen;
+    public function msgs(){
+        $this->msgs=Message::orderBy('created_at','desc')->limit(4)->get();
+
+        $this->unseen=count(Message::where('seen','=','0')->get());
+    }
+
+
+
     public function index()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $bookissues=Issuebook::get();
-        return view('back.admin.bookissues.index',compact('bookissues'));
+        return view('back.admin.bookissues.index',compact('bookissues','msgs','unseen'));
     }
 
     /**
@@ -29,9 +39,12 @@ class IssuebooksController extends Controller
      */
     public function create()
     {
+        $this->msgs();
+        $msgs=$this->msgs;
+        $unseen=$this->unseen;
         $books=Book::get();
         $classes=Stdclass::orderBy('order')->get();
-        return view('back.admin.bookissues.create',compact('books','classes'));
+        return view('back.admin.bookissues.create',compact('books','classes','msgs','unseen'));
     }
 
     /**
@@ -48,9 +61,20 @@ class IssuebooksController extends Controller
             'return_bef'=>'required|date',
         ]);
         $input=$request->except('_token');
+
         $bookissue=Issuebook::where(['student_id'=>$input['student'],'book_id'=>$input['book'],'returned'=>0])->get();
         if(count($bookissue))
         return redirect()->back()->with(['error'=>'Book Issued already to the same student and has not been returned ']);
+
+        $bookissueno=Issuebook::where(['book_id'=>$input['book'],'returned'=>0])->count();
+        $book=Book::find($input['book']);
+        if(!$book)
+        return redirect()->back()->with(['error'=>'Book not found']);
+        $booktotno=$book->stock;
+        $bookavailable=$booktotno-$bookissueno;
+        if($bookavailable<1)
+        return redirect()->back()->with(['error'=>'Book stock not available']);
+        
         $input['student_id']=$input['student'];
         $input['book_id']=$input['book'];
         $input['issued_at'] = Carbon::now()->toDateTimeString(); 
