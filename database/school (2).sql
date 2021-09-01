@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 24, 2021 at 07:30 PM
+-- Generation Time: Sep 01, 2021 at 01:27 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -189,6 +189,44 @@ INSERT INTO `classes` (`id`, `name`, `description`, `shift`, `order`, `active`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contact_details`
+--
+
+CREATE TABLE `contact_details` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `headertext` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `siteTitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sitelogo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `e_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `e_contactNumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contactNumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `e_mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fax` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `website` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `facebookUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `twitterUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `instagramUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `googleUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `footertext` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `footertextdesc` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `footersidelinktitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contact_details`
+--
+
+INSERT INTO `contact_details` (`id`, `headertext`, `siteTitle`, `sitelogo`, `e_email`, `email`, `address`, `e_contactNumber`, `contactNumber`, `e_mobile`, `mobile`, `fax`, `website`, `facebookUrl`, `twitterUrl`, `instagramUrl`, `googleUrl`, `footertext`, `footertextdesc`, `footersidelinktitle`, `created_at`, `updated_at`) VALUES
+(1, '<p>My School</p>\r\n\r\n<p>Hello</p>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2021-08-30 21:16:10', '2021-08-30 23:49:26');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `downloads`
 --
 
@@ -272,6 +310,8 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `galleries` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -298,8 +338,35 @@ CREATE TABLE `issuebooks` (
 --
 
 INSERT INTO `issuebooks` (`id`, `student_id`, `teacher_id`, `isteacher`, `returned`, `book_id`, `issued_at`, `return_bef`) VALUES
-(6, '3', NULL, 0, 0, 1, '2020-11-09', '2020-11-24'),
-(8, '15', NULL, 0, 0, 1, '2021-05-21', '2021-05-21');
+(9, '9', NULL, 0, 0, 1, '2021-08-26', '2021-09-09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `name`, `email`, `subject`, `message`, `seen`, `created_at`, `updated_at`) VALUES
+(1, 'milan adhikari', 'milan123ma70@gmail.com', 'good', 'fgdg', 0, '2021-08-25 02:27:39', '2021-08-25 02:27:39'),
+(2, 'milan adhikari', 'milan123ma70@gmail.com', 'good', 'hi there', 0, '2021-08-25 10:17:55', '2021-08-25 10:17:55'),
+(3, 'milan adhikari', 'milan123ma70@gmail.com', 'good', 'hello thanks', 0, '2021-08-25 10:22:21', '2021-08-25 10:22:21'),
+(4, 'milan adhikari', 'milan123ma70@gmail.com', 'good', 'bye guys', 0, '2021-08-25 10:26:02', '2021-08-25 10:26:02'),
+(5, 'milan adhikari', 'milan123ma70@gmail.com', 'good', 'hello man', 1, '2021-08-25 10:39:35', '2021-08-31 11:37:38');
 
 -- --------------------------------------------------------
 
@@ -337,7 +404,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2020_01_13_122256_create_teacherattendances_table', 2),
 (18, '2020_01_13_134706_create_schoolevents_table', 2),
 (19, '2020_04_10_102220_create_downloads_table', 2),
-(20, '2020_04_10_102451_create_galleries_table', 2),
 (21, '2020_04_10_103125_create_notifications_table', 2),
 (22, '2020_04_15_095743_create_parent_password_resets', 3),
 (23, '2020_04_15_102637_create_teacher_password_resets', 3),
@@ -347,7 +413,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (27, '2020_40_16_132354_add_class_id_to_students', 3),
 (28, '2020_09_04_050731_create_bookcategories_table', 4),
 (29, '2020_09_04_055759_create_books_table', 4),
-(30, '2020_09_04_060608_create_issuebooks_table', 4);
+(30, '2020_09_04_060608_create_issuebooks_table', 4),
+(31, '2021_08_25_070159_create_messages_table', 5),
+(32, '2020_04_10_102451_create_galleries_table', 6),
+(33, '2018_09_13_055144_create_contact_details_table', 7);
 
 -- --------------------------------------------------------
 
@@ -440,9 +509,17 @@ CREATE TABLE `schoolevents` (
   `pic` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0,
+  `event_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `schoolevents`
+--
+
+INSERT INTO `schoolevents` (`id`, `name`, `description`, `pic`, `file`, `active`, `event_date`, `created_at`, `updated_at`) VALUES
+(3, 'Teej program', 'nice prog', 'uploads/events/9224-2021-0825-25-1629861860.png', NULL, 1, '2021-08-31', '2021-08-24 21:23:28', '2021-08-30 23:28:04');
 
 -- --------------------------------------------------------
 
@@ -820,6 +897,12 @@ ALTER TABLE `classes`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `contact_details`
+--
+ALTER TABLE `contact_details`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `downloads`
 --
 ALTER TABLE `downloads`
@@ -864,6 +947,12 @@ ALTER TABLE `galleries`
 ALTER TABLE `issuebooks`
   ADD PRIMARY KEY (`id`),
   ADD KEY `issuebooks_book_id_foreign` (`book_id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -1019,6 +1108,12 @@ ALTER TABLE `classes`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `contact_details`
+--
+ALTER TABLE `contact_details`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `downloads`
 --
 ALTER TABLE `downloads`
@@ -1058,13 +1153,19 @@ ALTER TABLE `galleries`
 -- AUTO_INCREMENT for table `issuebooks`
 --
 ALTER TABLE `issuebooks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -1082,7 +1183,7 @@ ALTER TABLE `parents`
 -- AUTO_INCREMENT for table `schoolevents`
 --
 ALTER TABLE `schoolevents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sections`

@@ -53,5 +53,31 @@ Route::group(['prefix'=>'admin'],function(){
         });
         Route::get('assignments/{id}', 'AssignmentController@show')->name('assignments.show');
         Route::get('assignments', 'AssignmentController@index')->name('assignments.index');
+
+        Route::get('contact-details',[
+            'as' => 'admin.contact',
+            'uses' => 'ContactController@index'
+        ]);
+        Route::get('contact-details/edit',[
+            'as' => 'admin.editcontact',
+            'uses' => 'ContactController@edit'
+        ]);
+        Route::post('contact-details/update',[
+            'as' => 'admin.updatecontact',
+            'uses' => 'ContactController@update'
+        ]);
+
+        Route::get('message',[
+            'as' => 'admin.message',
+            'uses' => 'MessageController@index'
+        ]);
+        Route::get('message/{id}',[
+            'as' => 'admin.message.view',
+            'uses' => 'MessageController@show'
+        ]);
+        Route::delete('message/{id}',[
+            'as' => 'admin.message.delete',
+            'uses' => 'MessageController@destroy'
+        ]);
     });
 });

@@ -9,6 +9,8 @@
 
     <title>{{env('app.name','My school')}}</title>
 
+    <link rel="icon" href="{{ asset('img/logo1.png') }}">
+
     <!-- Bootstrap -->
     <link href="{{ asset('back/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -29,7 +31,7 @@
         <div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{{route('admin.dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+              <a href="{{route('admin.dashboard')}}" class="site_title"><img src="{{ asset('img/logo1.png') }}" alt="..." class="" style="height: 25px;"><span> My School</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -37,7 +39,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{ asset('back/prd/images/img.jpg') }}" alt="..." class="img-circle profile_img">
+                <img src="{{ asset('img/default.jpeg') }}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -110,10 +112,22 @@
                       <li><a href="{{route('bookissues.index')}}">Issued Book List</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-book"></i>School Events <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-play"></i>School Events <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{route('events.index')}}">All Events</a></li>
                       <li><a href="{{route('events.create')}}">Add Event</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-download"></i>Downloads<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('events.index')}}">All Files</a></li>
+                      <li><a href="{{route('events.create')}}">Add File</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-photo"></i>Gallery<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('events.index')}}">All Items</a></li>
+                      <li><a href="{{route('events.create')}}">Add New Item</a></li>
                     </ul>
                   </li>
                   <li>&nbsp;</li>
@@ -151,7 +165,7 @@
                         <ul class=" navbar-right">
                           <li class="nav-item dropdown open" style="padding-left: 15px;">
                             <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                              <img src="{{ asset('back/prd/images/img.jpg') }}" alt="">{{Auth::guard('admin')->user()->name}}
+                              <img src="{{ asset('img/default.jpeg') }}" alt="">{{Auth::guard('admin')->user()->name}}
                             </a>
                             <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                               <a class="dropdown-item"  href="{{url('/')}}"> Visit site</a>
@@ -175,7 +189,7 @@
                               @if (count($msgs))
                               @foreach ($msgs as $msg)
                                  <li class="nav-item">
-                                <a class="dropdown-item">
+                                <a class="dropdown-item" href="{{route('admin.message.view',['id'=>$msg->id])}}">
                                   <span class="image"><img src="{{ asset('back/prd/images/img.jpg') }}" alt="Profile Image" /></span>
                                   <span>
                                     <span>{{$msg->name}}</span>
@@ -190,7 +204,7 @@
                                 
                               <li class="nav-item">
                                 <div class="text-center">
-                                  <a class="dropdown-item">
+                                  <a class="dropdown-item" href="{{route('admin.message')}}">
                                     <strong>See All Messages</strong>
                                     <i class="fa fa-angle-right"></i>
                                   </a>
@@ -218,7 +232,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right d-none">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+            Created by Puset students biratnagar.
           </div>
           <div class="clearfix"></div>
         </footer>

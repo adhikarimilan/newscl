@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Message;
+use App\Schoolevent;
 
 class FrontendController extends Controller
 {
+    public function index(){
+        $events=Schoolevent::orderBy('event_date','desc')->limit(6)->get();
+        return view('front.welcome',compact('events'));
+    }
+
     public function savemessage(Request $request)
     {
         if($request->ajax())
@@ -25,6 +31,24 @@ class FrontendController extends Controller
             }
         }
     }
+
+    public function gallery(){
+
+    }
+
+    public function events(){
+        $events=Schoolevent::orderBy('event_date','desc')->get();
+        return view('front.events',compact('events'));  
+    }
+
+    public function singleevent($id){
+        
+    }
+    
+    public function downloads(){
+
+    }
+
 
 
 }

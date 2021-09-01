@@ -67,7 +67,7 @@
                         <input type="file"  name="file"  style="padding: 5px;" >
                         <input type="checkbox" name="remfile" id="remfile" class="d-none" value="1">
                     </div>
-                    @if ($event->pic)
+                    @if ($event->file)
                     <div class="input-group file-preview">
                       <a href="{{asset($event->file)}}" style="width:90px;">View file</a> 
                       <button type="button" class="btn btn-danger m-1" style="height:40px;" onclick="remprevfile()">&times;</button>
@@ -88,7 +88,14 @@
                             </select>
                         </div>
                     </div>
-                    
+                    <div class="form-group">
+                      <div class='input-group date' id='myDatepicker2'>
+                          <input type='text' class="form-control" placeholder="Event date" name='event_date' value="{{$event->event_date}}" required/>
+                          <span class="input-group-addon">
+                             <span class="fa fa-calendar"></span>
+                          </span>
+                      </div>
+                  </div>
                     <div class="form-actions form-group"><button type="submit" class="btn btn-success btn" id="std-btn">Submit</button></div>
                 </form>
                 
@@ -97,6 +104,14 @@
 @endsection
 
 @section('extra-js')
+<script src="{{asset('back/vendors/moment/min/moment.min.js')}}"></script>
+    <!-- bootstrap-datetimepicker -->    
+    <script src="{{asset('back/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
+  <script>
+    $('#myDatepicker2').datetimepicker({
+        format: 'YYYY-MM-DD',
+    });
+  </script>
 
   <script >
 
@@ -110,4 +125,10 @@ function remprevfile(){
 }
 
     </script>
+@endsection
+
+@section('extra-css')
+<link href="{{asset('back/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet')}}">
+    <!-- bootstrap-datetimepicker -->
+    <link href="{{asset('back/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}} " rel="stylesheet">
 @endsection

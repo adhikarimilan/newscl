@@ -69,6 +69,14 @@
                       </select>
                   </div>
               </div>
+              <div class="form-group">
+                <div class='input-group date' id='myDatepicker2'>
+                    <input type='text' class="form-control" placeholder="Event date" name='event_date' value="{{old('event_date')}}" required/>
+                    <span class="input-group-addon">
+                       <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
                     <div class="form-actions form-group"><button type="submit" class="btn btn-success btn">Submit</button></div>
                 </form>
                 
@@ -81,6 +89,19 @@
   <!-- /page content -->
 @endsection
 @section('extra-js')
-
+<script src="{{asset('back/vendors/moment/min/moment.min.js')}}"></script>
+    <!-- bootstrap-datetimepicker -->    
+    <script src="{{asset('back/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
+  <script>
+    $('#myDatepicker2').datetimepicker({
+        format: 'YYYY-MM-DD',
+    });
+  </script>
  
+@endsection
+
+@section('extra-css')
+<link href="{{asset('back/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet')}}">
+    <!-- bootstrap-datetimepicker -->
+    <link href="{{asset('back/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css')}} " rel="stylesheet">
 @endsection

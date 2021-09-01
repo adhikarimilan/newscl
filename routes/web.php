@@ -13,14 +13,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('front.welcome');
-})->name('welcome');
+// Route::get('/', function () {
+//     return view('front.welcome');
+// })->name('welcome');
 
 Route::get('/contact', function () {
     return view('front.contact');
 })->name('contact');
 
+Route::get('/','Front\FrontendController@index')->name('welcome');
+Route::get('events','Front\FrontendController@events')->name('events');
+
+Route::get('events/{id}','Front\FrontendController@singleevent')->name('singleevent');
+Route::get('downloads','Front\FrontendController@downloads')->name('downloads');
+Route::get('gallery','Front\FrontendController@gallery')->name('gallery');
 Route::post('/savemsg','Front\FrontendController@savemessage')->name('savemsg');
 
 Route::get('/help/{id?}', function ($id='') {
