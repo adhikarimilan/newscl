@@ -27,14 +27,13 @@
                 </div>
                 <div class="details-content">
                     <a href="#">
-                        <h4>Designing Effective Slider images</h4>
+                        <h4>{{$event->name}}</h4>
                     </a>
+                    <img src="{{asset($event->pic)}}" class="img img-responsive">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.									
+                        {{$event->description}}
                     </p>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolorema gna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commo doconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.									
-                    </p>
+                    
                 </div>
                 <div class="social-nav row no-gutters">
                     <div class="col-lg-6 col-md-6 ">
@@ -45,10 +44,10 @@
                             <li><a href="#"><i class="fa fa-behance"></i></a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-6 col-md-6 navs">
+                    {{-- <div class="col-lg-6 col-md-6 navs">
                         <a href="#" class="nav-prev"><span class="lnr lnr-arrow-left"></span>Prev Event</a>
                         <a href="#" class="nav-next">Next Event<span class="lnr lnr-arrow-right"></span></a>									
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="col-lg-4 event-details-right">
@@ -56,20 +55,20 @@
                     <h4>Details</h4>
                     <ul class="mt-10">
                         <li class="justify-content-between d-flex">
-                            <span>Start date</span>
-                            <span>15th April, 2018</span>
+                            <span>Event date</span>
+                            <span>{{date("jS  F Y ",strtotime($event->event_date))}}</span>
                         </li>
-                        <li class="justify-content-between d-flex">
+                        {{-- <li class="justify-content-between d-flex">
                             <span>End date</span>
                             <span>18th April, 2018</span>
                         </li>
                         <li class="justify-content-between d-flex">
                             <span>Ticket Price</span>
                             <span>Free of Cost</span>
-                        </li>														
+                        </li>														 --}}
                     </ul>
                 </div>
-                <div class="single-event-details">
+                {{-- <div class="single-event-details">
                     <h4>Venue</h4>
                     <ul class="mt-10">
                         <li class="justify-content-between d-flex">
@@ -102,7 +101,7 @@
                             <span>Santa Monica</span>
                         </li>														
                     </ul>
-                </div>														
+                </div>														 --}}
             </div>
         </div>
     </div>	

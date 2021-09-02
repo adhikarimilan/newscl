@@ -20,21 +20,26 @@
 <section class="events-list-area section-gap event-page-lists">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6 pb-30">
+            @foreach ($events as $event)
+                <div class="col-lg-6 pb-30">
                 <div class="single-carusel row align-items-center">
                     <div class="col-12 col-md-6 thumb">
-                        <img class="img-fluid" src="img/e1.jpg" alt="">
+                        <img class="img-fluid" src="{{asset($event->pic)}}" alt="">
                     </div>
                     <div class="detials col-12 col-md-6">
-                        <p>25th February, 2018</p>
-                        <a href="event-details.html"><h4>The Universe Through
-                        A Child S Eyes</h4></a>
+                        <p>{{date("jS  F Y ",strtotime($event->event_date))}}</p>
+                        <a href="{{route('singleevent',['id'=>$event->id])}}"><h4>{{$event->name}}</h4></a>
                         <p>
-                            For most of us, the idea of astronomy is something we directly connect to “stargazing”, telescopes and seeing magnificent displays in the heavens.
+                           {{substr($event->description,0,50)}}
+                           @if(strlen($event->description>50))
+                            &hellip;   
+                           @endif
                         </p>
                     </div>
                 </div>
             </div>
+            @endforeach
+            
             <div class="col-lg-6 pb-30">
                 <div class="single-carusel row align-items-center">
                     <div class="col-12 col-md-6 thumb">

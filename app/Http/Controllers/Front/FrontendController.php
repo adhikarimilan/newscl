@@ -42,7 +42,8 @@ class FrontendController extends Controller
     }
 
     public function singleevent($id){
-        
+        $event=Schoolevent::findOrFail($id); 
+        return view('front.singleevent',compact('event')); 
     }
     
     public function downloads(){
